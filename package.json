@@ -1,0 +1,21 @@
+{
+  "name": "xm-bakeries",
+  "version": "1.0.0",
+  "description": "Web application for XM Bakeries using Node.js and MySQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^11.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "mysql2": "^2.2.5",
+    "nodemon": "^3.1.10"
+  }
+}
