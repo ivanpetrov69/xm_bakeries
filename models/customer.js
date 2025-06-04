@@ -1,25 +1,43 @@
-const db = require('./db');
+const mongoose = require('mongoose');
 
-// Used during registration
-exports.add = async ({ name, email, phone, password }) => {
-  const [result] = await db.execute(
-    'INSERT INTO customers (name, email, phone, password) VALUES (?, ?, ?, ?)',
-    [name, email, phone, password]
-  );
-  return result;
-};
+const customerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
+});
 
-// Get all customers (used for admin viewing)
-exports.getAll = async () => {
-  const [rows] = await db.execute('SELECT id, name, email, phone FROM customers');
-  return rows;
-};
+const Customer = mongoose.model('Customer', customerSchema);
 
-// Used in login to find user by email
-exports.findByEmail = async (email) => {
-  const [rows] = await db.execute(
-    'SELECT * FROM customers WHERE email = ?',
-    [email]
-  );
-  return rows[0]; // return single user
+module.exports = {
+  // Used during registration
+  add: async ({ name, email, phone, password }) => {
+    const newCustomer = new Customer({ name, email, phone, password });
+    return await newCustomer.save(); // Returns the created document
+  },
+
+  // Get all customers (used for admin viewing)
+  getAll: async () => {
+    return await Customer.find({}, 'id name email phone'); // Returns only these fields
+  },
+
+  // Used in login to find user by email
+  findByEmail: async (email) => {
+    return await Customer.findOne({ email }); // Returns a single document
+  }
 };
